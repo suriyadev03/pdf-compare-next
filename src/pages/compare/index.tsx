@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useDiffCheckMutation } from "@/service/query/endpoints/diffCheckApi";
 import { RootState } from "@/store";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ComparePdf = () => {
     const { text1, text2, diff, currentPage,diffCurrentWords, numPages } = useSelector((state: RootState) => state.application);
@@ -35,6 +37,7 @@ const ComparePdf = () => {
         const updatedChanges = [...diffChanges];
         const renderedContent = [...diffData];
         newDiffCurrentWords.forEach((item, index) => {
+            let uuidv4New = uuidv4()
             const changes = {
                 title: '',
                 addedText: '',
@@ -47,26 +50,26 @@ const ComparePdf = () => {
             };
     
             if (item.removed) {
-                changes.newPdf = `show_${index}-`;
+                changes.newPdf = `show_${uuidv4New}`;
                 if (newDiffCurrentWords[index + 1]?.added) {
                     changes.title = 'Replaced';
                     changes.addedText = newDiffCurrentWords[index + 1].value;
                     changes.removedText = item.value;
-                    changes.oldPdf = `show_${index}-`;
+                    changes.oldPdf = `show_${uuidv4New}`;
                 } else {
                     changes.title = 'Removed';
                     changes.removedText = item.value;
-                    changes.oldPdf = `show_${index}-`;
+                    changes.oldPdf = `show_${uuidv4New}`;
                 }
             } else if (item.added) {
                 if (!newDiffCurrentWords[index - 1]?.removed) {
                     changes.title = 'Added';
                     changes.addedText = item.value;
-                    changes.newPdf = `show_${index}-`;
+                    changes.newPdf = `show_${uuidv4New}`;
                 }
             }
     
-            changes.pointerName = `scrollPoint_${index}-`;
+            changes.pointerName = `scrollPoint_${uuidv4New}`;
     
             if (changes.title) {
                 updatedChanges.push(changes);             
@@ -76,7 +79,7 @@ const ComparePdf = () => {
     
             const mappedData =  textParts.map((part: any, partIndex: any) => {
                 const content = (
-                    <span key={`${index}-${partIndex}`} className={item.added ? `text-green-500 added ${changes.newPdf}` : item.removed ? `text-red-500 removed ${changes.oldPdf}` : ""}>
+                    <span id={`scrollPoint_${uuidv4New}`} key={`${index}-${partIndex}`} className={item.added ? `text-green-500 added ${changes.newPdf}` : item.removed ? `text-red-500 removed ${changes.oldPdf}` : ""}>
                         {part}
                     </span>
                 );
@@ -131,6 +134,15 @@ const ComparePdf = () => {
             loadNextPage();
         }
     }, [currentPage]);
+    const handleScrollToChange = (pointerName:any) => {
+        const element = document.getElementById(pointerName);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+        }
+      };
     return (
         // <div className="space-y-4 p-4">
         //     <h1 className="text-2xl font-bold">Compare PDFs</h1>
@@ -189,7 +201,7 @@ const ComparePdf = () => {
               <div
                 key={`change_${i}_${changes.title}`}
                 className='changesContainer'
-                // onClick={() => handleScrollToChange(changes.pointerName, changes.oldPdf, changes.newPdf, changes.title)}
+                onClick={() => handleScrollToChange(changes.pointerName)}
               >
                 <span>{i + 1}. {changes.title}</span>
                 <span style={{ color: 'green' }}>{changes.addedText}</span>
