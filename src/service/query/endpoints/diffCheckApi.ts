@@ -6,7 +6,7 @@ export const DiffCheckApi = createApi({
   baseQuery: appBaseQuery,
   endpoints: (builder) => ({
     diffCheck: builder.mutation({
-      query: (diffRequest: { text1: string; text2: string, nextPage: number, numPages: number }) => {
+      query: (diffRequest: { text1: string; text2: string,pdf1PageText:string,pdf2PageText:string }) => {
 
         return {
           url: 'api/checkDiff',

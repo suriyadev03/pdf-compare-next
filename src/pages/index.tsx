@@ -30,8 +30,11 @@ const FileUploadComponent = () => {
         const parseResult = await parsePdf({ pdf1: file1, pdf2: file2 }).unwrap();
 
         if (parseResult.text1 && parseResult.text2) {
-          const diffResult = await diffCheck({ text1: parseResult.text1, numPages: parseResult.numPages, text2: parseResult.text2, nextPage: 1 }).unwrap();
-          console.log("Diff Result:", diffResult);
+          const diffResult = await diffCheck({
+            text1: parseResult.text1, text2: parseResult.text2,
+            pdf1PageText: parseResult.pdf1Texts[1],
+            pdf2PageText: parseResult.pdf2Texts[1]
+          }).unwrap();
           router.push('/compare')
         }
       } catch (err) {
