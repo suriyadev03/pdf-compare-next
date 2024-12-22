@@ -35,23 +35,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Only POST requests are allowed' });
   }
 
-  const { text1, text2, nextPage, numPages } = req.body;
+  const { text1, text2, pdf1PageText, pdf2PageText } = req.body;
 
-  if (!text1 || !text2 || !nextPage || !numPages) {
+  if (!text1 || !text2) {
     return res.status(400).json({ error: 'Missing text1, text2, or nextPage data' });
   }
 
   try {
     const paginationSize = 10;
-    const previousPercentage = (nextPage - 1) * paginationSize;
+    const previousPercentage = (1 - 1) * paginationSize;
 
     const text1Chunk = getLimitedWords(text1, previousPercentage + paginationSize, previousPercentage);
     const text2Chunk = getLimitedWords(text2, previousPercentage + paginationSize, previousPercentage);
 
-    const diff = previousPercentage < 100 ? diffWords(text1Chunk, text2Chunk) : [];
+    // const diff = previousPercentage < 100 ? diffWords(text1Chunk, text2Chunk) : [];
+    const diff = diffWords(pdf1PageText || '', pdf2PageText || '')
 
     res.status(200).json({
-      text1, text2, currentPage:nextPage, diff, numPages
+      text1, text2, currentPage: 2, diff
     });
   } catch (err: any) {
     console.error('Error computing diff:', err.message);

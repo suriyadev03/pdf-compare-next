@@ -7,174 +7,138 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const ComparePdf = () => {
-    const { text1, text2, diff, currentPage,diffCurrentWords, numPages } = useSelector((state: RootState) => state.application);
-    const [diffCheck, { isLoading, isSuccess }] = useDiffCheckMutation();
-    const router = useRouter();
-    const [diffData, setDiffData] = useState<any[]>([]);
-    const [diffChanges, setDiffChanges] = useState<any[]>([]);
+  const { text1, text2, diff, numPages, pdf1Texts, pdf2Texts } = useSelector((state: RootState) => state.application);
 
-    useEffect(()=>{
-        if(!text1){
-            router.push('/')
+  const [diffCheck, { isLoading, isSuccess }] = useDiffCheckMutation();
+  const router = useRouter();
+  const [diffData, setDiffData] = useState<any[]>([]);
+  const [diffChanges, setDiffChanges] = useState<any[]>([]);
+  const [selectedElement, setSelectedElement] = useState<string>('');
+
+  useEffect(() => {
+    if (!text1) {
+      router.push('/')
+    }
+    renderChanges(diff)
+    console.log("diffChangesdiffChanges", diffChanges);
+  }, [])
+
+
+  const loadNextPage = async (index: number) => {
+    try {
+      const response = await diffCheck({ text1, text2, pdf1PageText: pdf1Texts[index], pdf2PageText: pdf2Texts[index] }).unwrap();
+      renderChanges(response.diff);
+
+    } catch (err) {
+      console.error("Error loading next page:", err);
+    }
+  };
+
+  const renderChanges = (diffWords = diff) => {
+
+    const updatedChanges: any[] = [];
+    const renderedContent: any[] = [];
+    diffWords.forEach((item, index) => {
+      let uuid = uuidv4()
+      const changes: any = { ...item };
+      changes.highlightClass = `hightlight_${uuid}`;
+
+      if (item.removed) {
+        changes.newPdf = `show_${uuid}`;
+        if (diffWords[index + 1]?.added) {
+          changes.title = 'Replaced';
+          changes.addedText = diffWords[index + 1].value;
+          changes.removedText = item.value;
+          changes.oldPdf = `show_${uuid}`;
+        } else {
+          changes.title = 'Removed';
+          changes.removedText = item.value;
+          changes.oldPdf = `show_${uuid}`;
         }
-        renderChanges()
-        console.log("diffChangesdiffChanges", diffChanges);
-        
-    },[])
-    
-
-    const loadNextPage = async () => {
-        try {
-            const response = await diffCheck({ text1, text2, nextPage: currentPage + 1, numPages }).unwrap();
-            renderChanges(diffCurrentWords);
-        } catch (err) {
-            console.error("Error loading next page:", err);
+      } else if (item.added) {
+        if (!diffWords[index - 1]?.removed) {
+          changes.title = 'Added';
+          changes.addedText = item.value;
+          changes.newPdf = `show_${uuid}`;
         }
-    };
-    
-    const renderChanges = (newDiffCurrentWords = diffCurrentWords) => {
-        
-        const updatedChanges = [...diffChanges];
-        const renderedContent = [...diffData];
-        newDiffCurrentWords.forEach((item, index) => {
-            let uuidv4New = uuidv4()
-            const changes = {
-                title: '',
-                addedText: '',
-                removedText: '',
-                pointerName: '',
-                oldPdf: '',
-                newPdf: '',
-                oldPdfId : '',
-                newPdfId : '',
-            };
-    
-            if (item.removed) {
-                changes.newPdf = `show_${uuidv4New}`;
-                if (newDiffCurrentWords[index + 1]?.added) {
-                    changes.title = 'Replaced';
-                    changes.addedText = newDiffCurrentWords[index + 1].value;
-                    changes.removedText = item.value;
-                    changes.oldPdf = `show_${uuidv4New}`;
-                } else {
-                    changes.title = 'Removed';
-                    changes.removedText = item.value;
-                    changes.oldPdf = `show_${uuidv4New}`;
-                }
-            } else if (item.added) {
-                if (!newDiffCurrentWords[index - 1]?.removed) {
-                    changes.title = 'Added';
-                    changes.addedText = item.value;
-                    changes.newPdf = `show_${uuidv4New}`;
-                }
-            }
-    
-            changes.pointerName = `scrollPoint_${uuidv4New}`;
-    
-            if (changes.title) {
-                updatedChanges.push(changes);             
-            }
+      }
 
-            const textParts = item.value.split(/\n/);
-    
-            const mappedData =  textParts.map((part: any, partIndex: any) => {
-                const content = (
-                    <span id={`scrollPoint_${uuidv4New}`} key={`${index}-${partIndex}`} className={item.added ? `text-green-500 added ${changes.newPdf}` : item.removed ? `text-red-500 removed ${changes.oldPdf}` : ""}>
-                        {part}
-                    </span>
-                );
-    
-                return (
-                    <React.Fragment key={`${index}-${partIndex}`}>
-                        {content}
-                        {partIndex < textParts.length - 1 && <br />}
-                    </React.Fragment>
-                );
-            });
-            renderedContent.push(mappedData)
-            setDiffData(renderedContent)
-        });    
-        setDiffChanges(updatedChanges);
-    };
-    
-    
-    const renderDiff = (newDiffCurrentWords = diffCurrentWords) => {
-        // Create a local array to accumulate the changes
-    
-        // Process the diff array
-        const renderedContent : any[] = []
-        
-        newDiffCurrentWords.forEach((item, index) => {
-            const textParts = item.value.split(/\n/);
-    
-            const mappedData =  textParts.map((part: any, partIndex: any) => {
-                const content = (
-                    <span key={`${index}-${partIndex}`} className={item.added ? "text-green-500 added" : item.removed ? "text-red-500 removed" : ""}>
-                        {part}
-                    </span>
-                );
-    
-                return (
-                    <React.Fragment key={`${index}-${partIndex}`}>
-                        {content}
-                        {partIndex < textParts.length - 1 && <br />}
-                    </React.Fragment>
-                );
-            });
-            renderedContent.push(mappedData)
-        });
-    
-        return renderedContent;
-    };
-    
-    
+      if (changes.title) {
+        updatedChanges.push(changes);
+      }
 
-    useEffect(() => {
-        if (currentPage === 0) {
-            loadNextPage();
-        }
-    }, [currentPage]);
-    const handleScrollToChange = (pointerName:any) => {
-        const element = document.getElementById(pointerName);
-        if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-        }
-      };
-    return (
-        // <div className="space-y-4 p-4">
-        //     <h1 className="text-2xl font-bold">Compare PDFs</h1>
+      const textParts = item.value.split(/\n/);
 
-        //     <div className="space-y-2">
-        //         <h2 className="text-xl">Differences</h2>
-        //         <div>{renderDiff(diff)}</div>
-        //     </div>
+      const mappedData = textParts.map((part: any, partIndex: any) => {
 
-        //     <div className="mt-4 flex justify-between">
-        //         <button
-        //             onClick={() => router.push("/")}
-        //             className="bg-gray-500 text-white px-6 py-2 rounded"
-        //         >
-        //             Back
-        //         </button>
+        const content = (
+          <span id={`show_${uuid}`} key={`${index}-${partIndex}`} className={
+            `${item.added ? `text-green-500 added` : item.removed ? `text-red-500 removed` : ""} 
+            ${changes.highlightClass}
+            `
+          }>
+            {part}
+            {partIndex < textParts.length - 1 && <br />}
+          </span>
+        );
 
-        //         <button
-        //             onClick={loadNextPage}
-        //             disabled={isLoading || diff.length === 0} // Disable if no diff or still loading
-        //             className={`bg-blue-500 text-white px-6 py-2 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        //         >
-        //             {isLoading ? "Loading..." : "Next Page"}
-        //         </button>
-        //     </div>
-        // </div>
+        return (
+          <React.Fragment key={`${index}-${partIndex}`}>
+            {content}
+          </React.Fragment>
+        );
+      });
+      renderedContent.push(mappedData)
+      setDiffData(renderedContent)
+    });
+    setDiffChanges(updatedChanges);
+  };
 
-        <>
-        <div className='companyLogo'>
+
+  const handleScrollToChange = (highlightClass: string, isReplaced = false) => {
+    const highlightElements = document.getElementsByClassName(highlightClass);
+
+    setSelectedElement(highlightClass);
+    const highlights = document.getElementsByClassName('highlight');
+
+    // Iterate backward to avoid skipping elements
+    for (let i = highlights.length - 1; i >= 0; i--) {
+      highlights[i].classList.remove('highlight');
+    }
+    if (isReplaced) {
+      const nextHiglightElement = highlightElements[highlightElements.length - 1].nextElementSibling?.className || '';
+
+      const highlightClasses = nextHiglightElement.split(' ').find(className => className.startsWith('hightlight_')) || '';
+      const nextHighlightElements = document.getElementsByClassName(highlightClasses);
+      for (let i of nextHighlightElements) {
+
+        i?.classList?.add('highlight')
+      }
+
+    }
+
+    for (let i of highlightElements) {
+      i?.classList?.add('highlight')
+    }
+
+
+
+    if (highlightElements[0]) {
+      highlightElements[0].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+
+  };
+
+
+  return (
+    <>
+      <div className='companyLogo'>
         <img src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
       </div>
-        <div className='container'>
+      <div className='container'>
         <div className='PreviewPage'>
           <div className='PdfDiffView'>
             <div className='oldPdf'>
@@ -186,11 +150,6 @@ const ComparePdf = () => {
             <div className='newPdf' >
               <div className='pdfName'>New PDF: <b></b></div>
               <div className='pdf_Section_content'>
-                {/* {diffResult.map((result) => (
-                  <span key={result.id} id={result.id}>
-                    {result.span}
-                  </span>
-                ))} */}
                 <div>{diffData}</div>
               </div>
             </div>
@@ -201,7 +160,7 @@ const ComparePdf = () => {
               <div
                 key={`change_${i}_${changes.title}`}
                 className='changesContainer'
-                onClick={() => handleScrollToChange(changes.pointerName)}
+                onClick={() => handleScrollToChange(changes.highlightClass, changes.title === 'Replaced')}
               >
                 <span>{i + 1}. {changes.title}</span>
                 <span style={{ color: 'green' }}>{changes.addedText}</span>
@@ -210,16 +169,20 @@ const ComparePdf = () => {
             ))}
           </div>
         </div>
-                 <button
-                     onClick={loadNextPage}
-                     disabled={isLoading || diff.length === 0} // Disable if no diff or still loading
-                     className={`loadMoreBtn bg-blue-500 text-white px-6 py-2 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                 >
-                     {isLoading ? "Loading..." : "View More"}
-                 </button>
+        <div className="pagination">
+          {Array.from({ length: numPages }, (_, index) => (
+            <button
+              key={index}
+              className="pagination-button"
+              onClick={() => loadNextPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
-      </>
-    );
+    </>
+  );
 };
 
 export default ComparePdf;
