@@ -168,9 +168,7 @@ console.log("isLoading",isLoading);
                 <span style={{ color: 'red' }}>{changes.removedText}</span>
               </div>
             ))}
-          </div>
-        </div>
-        <div className="pagination">
+            <div className="pagination">
           {Array.from({ length: numPages }, (_, index) => (
             <button
               key={index}
@@ -181,6 +179,9 @@ console.log("isLoading",isLoading);
             </button>
           ))}
         </div>
+          </div>
+        </div>
+        
       </div>
       {
         isLoading && <Loader/>
