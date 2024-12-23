@@ -45,11 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const paginationSize = 10;
     const previousPercentage = (1 - 1) * paginationSize;
 
-    const text1Chunk = getLimitedWords(text1, previousPercentage + paginationSize, previousPercentage);
-    const text2Chunk = getLimitedWords(text2, previousPercentage + paginationSize, previousPercentage);
-
     // const diff = previousPercentage < 100 ? diffWords(text1Chunk, text2Chunk) : [];
     const diff = diffWords(pdf1PageText || '', pdf2PageText || '')
+    
 
     res.status(200).json({
       text1, text2, currentPage: 2, diff

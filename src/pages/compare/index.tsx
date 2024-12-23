@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useDiffCheckMutation } from "@/service/query/endpoints/diffCheckApi";
 import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
+import Loader from "../loader";
 
 
 const ComparePdf = () => {
@@ -20,9 +21,9 @@ const ComparePdf = () => {
       router.push('/')
     }
     renderChanges(diff)
-    console.log("diffChangesdiffChanges", diffChanges);
   }, [])
 
+console.log("isLoading",isLoading);
 
   const loadNextPage = async (index: number) => {
     try {
@@ -181,6 +182,9 @@ const ComparePdf = () => {
           ))}
         </div>
       </div>
+      {
+        isLoading && <Loader/>
+      }
     </>
   );
 };
