@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { appBaseQuery } from "../baseQuery/appBaseQuery";
 
-// API for PDF parsing
 export const ParsePdfApi = createApi({
   reducerPath: "ParsePdfApi",
   baseQuery: appBaseQuery,

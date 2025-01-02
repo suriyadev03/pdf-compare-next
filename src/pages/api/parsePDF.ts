@@ -65,14 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const pdf1TextChunks = await extractTextInChunks(pdf1Buffer);
         const pdf2TextChunks = await extractTextInChunks(pdf2Buffer);
         
-        // Extract full text
-        const text1 = await pdf(pdf1Buffer);
-        const text2 = await pdf(pdf2Buffer);
         console.log("lenght",Math.max(Object.keys(pdf1TextChunks).length,Object.keys(pdf2TextChunks).length));
         
         res.status(200).json({
-          text1: text1.text,
-          text2: text2.text,
           numPages: Math.max(Object.keys(pdf1TextChunks).length,Object.keys(pdf2TextChunks).length),
           pdf1Texts: pdf1TextChunks,
           pdf2Texts: pdf2TextChunks,

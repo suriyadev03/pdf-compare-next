@@ -31,7 +31,6 @@ const FileUploadComponent = () => {
 
         if (parseResult.pdf1Texts[1] && parseResult.pdf2Texts[1]) {
           const diffResult = await diffCheck({
-            text1: parseResult.text1, text2: parseResult.text2,
             pdf1PageText: parseResult.pdf1Texts[1],
             pdf2PageText: parseResult.pdf2Texts[1]
           }).unwrap();
@@ -56,10 +55,10 @@ const FileUploadComponent = () => {
               className="icon_image"
               src="/assets/icon.png"
               alt="icon_image"
-              width={100} // Set the width
-              height={0}  // Set height as 0 (for intrinsic layout)
-              style={{ height: 'auto' }} // Ensure the height is auto with inline styling
-              layout="intrinsic" // This keeps the aspect ratio intact
+              width={100} 
+              height={0}  
+              style={{ height: 'auto' }} 
+              layout="intrinsic" 
             />
             <p>Use our side-by-side PDF comparison software below to highlight changes</p>
           </div>
@@ -71,10 +70,10 @@ const FileUploadComponent = () => {
                     className="icon_image"
                     src="/assets/addFile.png"
                     alt="icon_image"
-                    width={100} // Set the width
-                    height={0}  // Set height as 0 (for intrinsic layout)
-                    style={{ height: 'auto' }} // Ensure the height is auto with inline styling
-                    layout="intrinsic" // This keeps the aspect ratio intact
+                    width={100} 
+                    height={0}  
+                    style={{ height: 'auto' }} 
+                    layout="intrinsic" 
                   />
                 </div>
                 <span> Click Upload a Older PDF version here</span>
@@ -92,10 +91,10 @@ const FileUploadComponent = () => {
                     className="icon_image"
                     src="/assets/addFile.png"
                     alt="icon_image"
-                    width={100} // Set the width
-                    height={0}  // Set height as 0 (for intrinsic layout)
-                    style={{ height: 'auto' }} // Ensure the height is auto with inline styling
-                    layout="intrinsic" // This keeps the aspect ratio intact
+                    width={100} 
+                    height={0}  
+                    style={{ height: 'auto' }} 
+                    layout="intrinsic" 
                   />
                 </div>
                 <span>Click Upload a Newer PDF version here</span>

@@ -1034,7 +1034,7 @@ div#__next {
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
 }
-.loader>div {
+/* .loader>div {
   width: 48px;
   height: 48px;
   border: 5px solid #FFF;
@@ -1052,30 +1052,70 @@ div#__next {
   100% {
       transform: rotate(360deg);
   }
-}
-.loadMoreBtn{
-  position: absolute;
-  right: 0;
-}
-/* .pagination{
-  display: flex;
-  justify-content: center;
 } */
-.pagination button{
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid white;
-  border-radius: 5px;
-  color: white;
-}
 .pagination {
   position: sticky;
   right: 0;
   width: 100%;
-  bottom: -1px;
+  bottom: -3px;
   text-align: center;
   left: 0;
-  z-index: 99999999;
+  /* z-index: 99999999; */
   background-color: #000;
   padding: 10px;
+}
+.pagination ul{
+  list-style: none;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-bottom: 5rem; */
+  font-size: 1.2rem;
+  gap: 1px;
+}
+.pagination li{
+  padding: 4px 0px;
+  cursor: pointer;
+  box-sizing: 3px;
+  font-weight: 500;
+  color: white;
+  border-radius: .3rem;
+  border:  1px solid white;
+}
+.pagination li a{
+  padding: 8px;
+}
+.pagination li:hover{
+  background-color: #ff6900;
+  color: #fff;
+}
+.pagination ul .selected{
+  background-color: #ff6900;
+  color: black;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader div {
+  width: 40px;
+  aspect-ratio: 1.154;
+  clip-path: polygon(50% 0,100% 100%,0 100%);
+  display: grid;
+  background:
+    conic-gradient(from 0deg   at 50% 60%,#ff6900 120deg,#0000 0),
+    conic-gradient(from 120deg at 50% 60%,#ff6900 120deg,#0000 0),
+    conic-gradient(from 240deg at 50% 60%,#ff6900 120deg,#0000 0),
+    conic-gradient(from 0deg   at 50% 60%,#f3b080 120deg,#0000 0),
+    conic-gradient(from 120deg at 50% 60%,#f3b080 120deg,#0000 0),
+    conic-gradient(from 240deg at 50% 60%,#f3b080 120deg,#0000 0),
+    #ff6900;
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+  animation: l8 1.5s infinite;
+}
+@keyframes l8 {
+  0%   {background-position: left,top,right}
+  30%,
+  50%  {background-position: left,top,right,center,center,center}
+  80%,
+  100% {background-position: center}
 }

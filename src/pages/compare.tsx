@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useDiffCheckMutation } from "@/service/query/endpoints/diffCheckApi";
 import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
-import Loader from "../loader";
+import Loader from "./loader";
+import ReactPaginate from "react-paginate";
 
 
 const ComparePdf = () => {
-  const { text1, text2, diff, numPages, pdf1Texts, pdf2Texts } = useSelector((state: RootState) => state.application);
+  const { diff, numPages, pdf1Texts, pdf2Texts } = useSelector((state: RootState) => state.application);
 
-  const [diffCheck, { isLoading, isSuccess }] = useDiffCheckMutation();
+  const [diffCheck, { isLoading }] = useDiffCheckMutation();
   const router = useRouter();
   const [diffData, setDiffData] = useState<any[]>([]);
   const [diffChanges, setDiffChanges] = useState<any[]>([]);
-  const [selectedElement, setSelectedElement] = useState<string>('');
 
   useEffect(() => {
-    if (!text1) {
+    if (!diff.length) {
       router.push('/')
     }
     renderChanges(diff)
   }, [])
 
-console.log("isLoading",isLoading);
 
-  const loadNextPage = async (index: number) => {
+  const loadNextPage = async (event: any) => {
+    const selectpage = event.selected;
+
     try {
-      const response = await diffCheck({ text1, text2, pdf1PageText: pdf1Texts[index], pdf2PageText: pdf2Texts[index] }).unwrap();
+      const response = await diffCheck({ pdf1PageText: pdf1Texts[selectpage + 1], pdf2PageText: pdf2Texts[selectpage + 1] }).unwrap();
       renderChanges(response.diff);
 
     } catch (err) {
@@ -95,34 +96,27 @@ console.log("isLoading",isLoading);
     setDiffChanges(updatedChanges);
   };
 
-
   const handleScrollToChange = (highlightClass: string, isReplaced = false) => {
     const highlightElements = document.getElementsByClassName(highlightClass);
 
-    setSelectedElement(highlightClass);
     const highlights = document.getElementsByClassName('highlight');
 
-    // Iterate backward to avoid skipping elements
     for (let i = highlights.length - 1; i >= 0; i--) {
       highlights[i].classList.remove('highlight');
     }
     if (isReplaced) {
       const nextHiglightElement = highlightElements[highlightElements.length - 1].nextElementSibling?.className || '';
-
       const highlightClasses = nextHiglightElement.split(' ').find(className => className.startsWith('hightlight_')) || '';
       const nextHighlightElements = document.getElementsByClassName(highlightClasses);
       for (let i of nextHighlightElements) {
 
         i?.classList?.add('highlight')
       }
-
     }
 
     for (let i of highlightElements) {
       i?.classList?.add('highlight')
     }
-
-
 
     if (highlightElements[0]) {
       highlightElements[0].scrollIntoView({
@@ -169,7 +163,7 @@ console.log("isLoading",isLoading);
               </div>
             ))}
             <div className="pagination">
-          {Array.from({ length: numPages }, (_, index) => (
+              {/* {Array.from({ length: numPages }, (_, index) => (
             <button
               key={index}
               className="pagination-button"
@@ -177,14 +171,23 @@ console.log("isLoading",isLoading);
             >
               {index + 1}
             </button>
-          ))}
-        </div>
+          ))} */}
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={loadNextPage}
+                pageRangeDisplayed={5}
+                pageCount={numPages}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+              />
+            </div>
           </div>
         </div>
-        
+
       </div>
       {
-        isLoading && <Loader/>
+        isLoading && <Loader />
       }
     </>
   );
