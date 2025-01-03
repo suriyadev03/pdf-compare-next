@@ -130,10 +130,8 @@ const ComparePdf = () => {
 
   return (
     <>
-      <div className='companyLogo'>
-        <img src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
-      </div>
       <div className='container'>
+      <img className='icon-logo' alt="icon" src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png"/>
         <div className='PreviewPage'>
           <div className='PdfDiffView'>
             <div className='oldPdf'>
@@ -163,20 +161,11 @@ const ComparePdf = () => {
               </div>
             ))}
             <div className="pagination">
-              {/* {Array.from({ length: numPages }, (_, index) => (
-            <button
-              key={index}
-              className="pagination-button"
-              onClick={() => loadNextPage(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))} */}
               <ReactPaginate
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={loadNextPage}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={3}
                 pageCount={numPages}
                 previousLabel="<"
                 renderOnZeroPageCount={null}

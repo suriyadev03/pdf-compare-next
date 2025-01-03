@@ -44,15 +44,13 @@ const FileUploadComponent = () => {
 
   return (
     <>
-      <div className='companyLogo'>
-        <img src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
-      </div>
       <div className='uploadPage'>
         <div className=''>
           <div className='header-section'>
+          <img className='login_page_icon' src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
             <h1>Compare PDF files</h1>
             <Image
-              className="icon_image"
+              className="icon_image  compare_icon"
               src="/assets/icon.png"
               alt="icon_image"
               width={100} 
