@@ -41,7 +41,7 @@ const ComparePdf = () => {
     const updatedChanges: any[] = [];
     const renderedContent: any[] = [];
     diffWords.forEach((item, index) => {
-      let uuid = uuidv4()
+      const uuid = uuidv4()
       const changes: any = { ...item };
       changes.highlightClass = `hightlight_${uuid}`;
 
@@ -108,13 +108,13 @@ const ComparePdf = () => {
       const nextHiglightElement = highlightElements[highlightElements.length - 1].nextElementSibling?.className || '';
       const highlightClasses = nextHiglightElement.split(' ').find(className => className.startsWith('hightlight_')) || '';
       const nextHighlightElements = document.getElementsByClassName(highlightClasses);
-      for (let i of nextHighlightElements) {
+      for (const i of nextHighlightElements) {
 
         i?.classList?.add('highlight')
       }
     }
 
-    for (let i of highlightElements) {
+    for (const i of highlightElements) {
       i?.classList?.add('highlight')
     }
 

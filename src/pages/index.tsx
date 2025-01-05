@@ -3,7 +3,6 @@ import { useParsePdfMutation } from '@/service/query/endpoints/parsePDFApi';
 import { useDiffCheckMutation } from '@/service/query/endpoints/diffCheckApi';
 import { FaSpinner } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import '../styles/globals.css'
 import Image from 'next/image';
 
 const FileUploadComponent = () => {
@@ -30,7 +29,7 @@ const FileUploadComponent = () => {
         const parseResult = await parsePdf({ pdf1: file1, pdf2: file2 }).unwrap();
 
         if (parseResult.pdf1Texts[1] && parseResult.pdf2Texts[1]) {
-          const diffResult = await diffCheck({
+           await diffCheck({
             pdf1PageText: parseResult.pdf1Texts[1],
             pdf2PageText: parseResult.pdf2Texts[1]
           }).unwrap();
