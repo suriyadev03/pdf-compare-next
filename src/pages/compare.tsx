@@ -6,7 +6,7 @@ import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
 import Loader from "./loader";
 import ReactPaginate from "react-paginate";
-
+import styles from '../styles/globals.module.css'
 
 const ComparePdf = () => {
   const { diff, numPages, pdf1Texts, pdf2Texts } = useSelector((state: RootState) => state.application);
@@ -41,7 +41,7 @@ const ComparePdf = () => {
     const updatedChanges: any[] = [];
     const renderedContent: any[] = [];
     diffWords.forEach((item, index) => {
-      let uuid = uuidv4()
+      const uuid = uuidv4()
       const changes: any = { ...item };
       changes.highlightClass = `hightlight_${uuid}`;
 
@@ -108,13 +108,13 @@ const ComparePdf = () => {
       const nextHiglightElement = highlightElements[highlightElements.length - 1].nextElementSibling?.className || '';
       const highlightClasses = nextHiglightElement.split(' ').find(className => className.startsWith('hightlight_')) || '';
       const nextHighlightElements = document.getElementsByClassName(highlightClasses);
-      for (let i of nextHighlightElements) {
+      for (const i of nextHighlightElements) {
 
         i?.classList?.add('highlight')
       }
     }
 
-    for (let i of highlightElements) {
+    for (const i of highlightElements) {
       i?.classList?.add('highlight')
     }
 
@@ -130,29 +130,29 @@ const ComparePdf = () => {
 
   return (
     <>
-      <div className='container'>
-      <img className='icon-logo' alt="icon" src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png"/>
-        <div className='PreviewPage'>
-          <div className='PdfDiffView'>
-            <div className='oldPdf'>
-              <div className='pdfName'>Old PDF: <b></b></div>
-              <div className='pdf_Section_content'>
+      <div className={styles.container}>
+      <img className={styles.iconLogo} alt="icon" src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png"/>
+        <div className={styles.PreviewPage}>
+          <div className={styles.PdfDiffView}>
+            <div className={styles.oldPdf}>
+              <div className={styles.pdfName}>Old PDF: <b></b></div>
+              <div className={styles.pdf_Section_content}>
                 <div>{diffData}</div>
               </div>
             </div>
-            <div className='newPdf' >
-              <div className='pdfName'>New PDF: <b></b></div>
-              <div className='pdf_Section_content'>
+            <div className={styles.newPdf}>
+              <div className={styles.pdfName}>New PDF: <b></b></div>
+              <div className={styles.pdf_Section_content}>
                 <div>{diffData}</div>
               </div>
             </div>
           </div>
-          <div className='changesShow'>
+          <div className={styles.changesShow}>
             <span>Changes:</span>
             {diffChanges.map((changes, i) => (
               <div
                 key={`change_${i}_${changes.title}`}
-                className='changesContainer'
+                className={styles.changesContainer}
                 onClick={() => handleScrollToChange(changes.highlightClass, changes.title === 'Replaced')}
               >
                 <span>{i + 1}. {changes.title}</span>
@@ -160,7 +160,7 @@ const ComparePdf = () => {
                 <span style={{ color: 'red' }}>{changes.removedText}</span>
               </div>
             ))}
-            <div className="pagination">
+            <div className={styles.pagination}>
               <ReactPaginate
                 breakLabel="..."
                 nextLabel=">"

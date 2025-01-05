@@ -1,6 +1,8 @@
+import styles from '../styles/globals.module.css'
+
 const Loader = () => {
     return(
-        <div className="loader">
+        <div className={styles.loader}>
             <div></div>
         </div>
     )
