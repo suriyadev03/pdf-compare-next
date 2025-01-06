@@ -6,6 +6,7 @@ import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
 import Loader from "./loader";
 import ReactPaginate from "react-paginate";
+import './style/compare.css'
 
 
 const ComparePdf = () => {
@@ -158,11 +159,13 @@ const ComparePdf = () => {
                 onClick={() => handleScrollToChange(changes.highlightClass, changes.title === 'Replaced')}
               >
                 <span>{i + 1}. {changes.title}</span>
-                <span style={{ color: 'green' }}>{changes.addedText}</span>
-                <span style={{ color: 'red' }}>{changes.removedText}</span>
+                <span style={{ color: 'green', backgroundColor: 'rgb(0 128 0 / 21%)' }}>{changes.addedText}</span>
+                <span style={{ color: 'red',  backgroundColor: 'rgb(255 0 0 / 10%)' }}>{changes.removedText}</span>
               </div>
             ))}
-            <div className="pagination">
+            
+          </div>
+          <div className="pagination">
               {/* {Array.from({ length: numPages }, (_, index) => (
             <button
               key={index}
@@ -176,14 +179,14 @@ const ComparePdf = () => {
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={loadNextPage}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={3}
                 pageCount={numPages}
                 previousLabel="<"
                 renderOnZeroPageCount={null}
               />
             </div>
-          </div>
         </div>
+       
 
       </div>
       {
