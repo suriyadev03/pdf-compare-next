@@ -4,7 +4,6 @@ import { useDiffCheckMutation } from '@/service/query/endpoints/diffCheckApi';
 import { FaSpinner } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import './style/main.css'
 
 
 const FileUploadComponent = () => {

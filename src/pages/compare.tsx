@@ -6,7 +6,6 @@ import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
 import Loader from "./loader";
 import ReactPaginate from "react-paginate";
-import './style/compare.css'
 
 
 const ComparePdf = () => {

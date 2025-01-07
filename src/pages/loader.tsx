@@ -1,9 +1,8 @@
-import styles from './style/loader.module.css'
 
 const Loader = () => {
     return(
-        <div className={styles.loader}>
-            <div className={styles.loaderCircle}></div>
+        <div className={".loader"}>
+            <div className={".loaderCircle"}></div>
         </div>
     )
 }
