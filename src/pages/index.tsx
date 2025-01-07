@@ -4,7 +4,8 @@ import { useDiffCheckMutation } from '@/service/query/endpoints/diffCheckApi';
 import { FaSpinner } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import './style/main.css'
+import styles from './style/main.module.css'
+
 
 
 const FileUploadComponent = () => {
@@ -45,17 +46,17 @@ const FileUploadComponent = () => {
 
   return (
     <>
-      <div className='companyLogo'>
-        <img src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
+      <div>
+        <img className={styles.companyLogo} src="https://www.straive.com/wp-content/uploads/2024/12/straive-final-logo-184x48.png" alt="icon" />
       </div>
-      <div className='uploadPage'>
-        <div className=''>
-          <div className='header-section'>
-            <h1>Compare PDF files</h1>
+      <div className={styles.uploadPage}>
+        <div>
+          <div className={styles.headerSection}>
+            <h1 className={styles.headTitle}>Compare PDF files</h1>
             <Image
-              className="icon_image"
+              className={styles.iconImage}
               src="/assets/icon.png"
-              alt="icon_image"
+              alt="iconImage"
               width={100} 
               height={0}  
               style={{ height: 'auto' }} 
@@ -63,14 +64,14 @@ const FileUploadComponent = () => {
             />
             <p>Use our side-by-side PDF comparison software below to highlight changes</p>
           </div>
-          <div className='upload_pdf_Section'>
-            <div className='upload_tool_wrapper'>
-              <div className="selectPdf">
-                <div className='icon-class'>
+          <div className={styles.upload_pdf_Section}>
+            <div className={styles.uploadToolWrapper}>
+              <div className={styles.selectPdf}>
+                <div className={styles.iconClass}>
                   <Image
-                    className="icon_image"
+                    className={styles.iconImage}
                     src="/assets/addFile.png"
-                    alt="icon_image"
+                    alt="iconImage"
                     width={100} 
                     height={0}  
                     style={{ height: 'auto' }} 
@@ -78,39 +79,29 @@ const FileUploadComponent = () => {
                   />
                 </div>
                 <span> Click Upload a Older PDF version here</span>
-                <div className="pdf-wrapper">
-                  <canvas id="pdf-canvas-old"></canvas>
-                  <div id="remove-old-pdf" className="remove-pdf"><i className="fa fa-close"></i>
-                  </div>
-                </div>
-                <span className="old-pdf-name">{file1 ? file1.name : 'No file chosen'}</span>
-                <input type="file" className="pdf-selector" id="old-pdf-selector" name="pdf1" accept=".pdf" onChange={(e) => handleFileChange(e, 1)} />
+                <span className={styles.oldPdfName}>{file1 ? file1.name : 'No file chosen'}</span>
+                <input type="file" className={styles.pdfSelector} name="pdf1" accept=".pdf" onChange={(e) => handleFileChange(e, 1)} />
               </div>
-              <div className="selectPdf">
-                <div className='icon-class iconcls2'>
+              <div className={styles.selectPdf}>
+                <div>
                   <Image
-                    className="icon_image"
+                    className={styles.iconImage}
                     src="/assets/addFile.png"
-                    alt="icon_image"
+                    alt="iconImage"
                     width={100} 
                     height={0}  
                     style={{ height: 'auto' }} 
                     layout="intrinsic" 
                   />
                 </div>
-                <span>Click Upload a Newer PDF version here</span>
-                <div className="pdf-wrapper">
-                  <canvas id="pdf-canvas-new"></canvas>
-                  <div id="remove-new-pdf" className="remove-pdf"><i className="fa fa-close"></i>
-                  </div>
-                </div>
-                <span className="new-pdf-name">{file2 ? file2.name : 'No file chosen'}</span>
-                <input type="file" className="pdf-selector" id="new-pdf-selector" name="pdf2" accept=".pdf" onChange={(e) => handleFileChange(e, 2)} />
+                <span className={styles.subTitle}>Click Upload a Newer PDF version here</span>
+                <span className={styles.newPdfName}>{file2 ? file2.name : 'No file chosen'}</span>
+                <input type="file" className={styles.pdfSelector} name="pdf2" accept=".pdf" onChange={(e) => handleFileChange(e, 2)} />
               </div>
             </div>
-            <button type="submit" disabled={!file1 || !file2} onClick={handleSubmit} className='flex justify-center'>
+            <button type="submit" disabled={!file1 || !file2} onClick={handleSubmit} className={styles.uploadButton}>
               {isParsing || isDiffing ? (
-                <FaSpinner className="animate-spin h-5 w-5 mr-3 text-white" />
+                <FaSpinner className={`animate-spin h-5 w-5 mr-3 text-white`} />
               ) : (
                 'Compare'
               )}
