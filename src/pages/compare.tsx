@@ -49,17 +49,17 @@ const ComparePdf = () => {
         if (diffWords[index + 1]?.added) {
           changes.title = 'Replaced';
           changes.addedText = diffWords[index + 1].value;
-          changes.removedText = item.value;
+          changes.removedText = item.value.replace("Test FileRev","");
           changes.oldPdf = `show_${uuid}`;
         } else {
           changes.title = 'Removed';
-          changes.removedText = item.value;
+          changes.removedText = item.value.replace("Test FileRev","");
           changes.oldPdf = `show_${uuid}`;
         }
       } else if (item.added) {
         if (!diffWords[index - 1]?.removed) {
           changes.title = 'Added';
-          changes.addedText = item.value;
+          changes.addedText = item.value.replace("Test FileRev","");
           changes.newPdf = `show_${uuid}`;
         }
       }
@@ -78,7 +78,7 @@ const ComparePdf = () => {
             ${changes.highlightClass}
             `
           }>
-            {part}
+            {part.replace("Test FileRev","")}
             {partIndex < textParts.length - 1 && <br />}
           </span>
         );
