@@ -10,7 +10,6 @@ import ReactPaginate from "react-paginate";
 
 const ComparePdf = () => {
   const { diff, numPages, pdf1Texts, pdf2Texts } = useSelector((state: RootState) => state.application);
-
   const [diffCheck, { isLoading }] = useDiffCheckMutation();
   const router = useRouter();
   const [diffData, setDiffData] = useState<any[]>([]);

@@ -209,7 +209,7 @@ body {
     bottom: 5px;
     text-align: center;
     left: 21px;
-    z-index: 99999999;
+    /* z-index: 99999999; */
     padding: 5px 5px;
     background-color: rgb(19 15 64);
     background-image: url(https://www.pngkey.com/png/full/48-483820_background-png-patterns-transparent-pattern-background-png.png);
